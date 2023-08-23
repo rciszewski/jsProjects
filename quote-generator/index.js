@@ -4,23 +4,33 @@ const authorText = document.getElementById('author');
 const twitterBtn = document.getElementById('twitter');
 const newQuoteBtn = document.getElementById('new-quote');
 const loader = document.getElementById('loader');
+const error = document.getElementById('error');
 
-let apiQuotes = []
+let apiQuotes = [];
+//global variables for API error handling of fetching quotes
+let retryCount = 0;
+let maxRetries = 3;
 
-// show loading
-const loading = () => {
+const showLoadingSpinner = () => {
   loader.hidden = false;
   quoteContainer.hidden = true;
+  error.hidden = true;
 }
 
-// hide loading
-const complete = () => {
+const removeLoadingSpinner = () => {
   quoteContainer.hidden = false;
   loader.hidden = true;
+  error.hidden = true;
+}
+
+const showErrorMessage = () => {
+  quoteContainer.hidden = true;
+  loader.hidden = true;
+  error.hidden = false
 }
 // Snow new quote
 const newQuote = () => {
-  loading();
+ showLoadingSpinner();
   // pick a random quote from apiQuotes array
   const quote = apiQuotes[Math.floor(Math.random() * apiQuotes.length)];
   // check if author field is blank and replace it with unknown
@@ -33,7 +43,7 @@ const newQuote = () => {
     : quoteText.classList.remove('long-quote');
   //set quote and hide loader
   quoteText.textContent = quote.text;
-  complete();
+  removeLoadingSpinner();
 }
 
 // Tweet quote
@@ -44,15 +54,25 @@ const tweetQuote = () => {
 
 // Get quotes from api
 const getQuotes = async () => {
-  loading();
+  showLoadingSpinner();
   const apiURL = 'https://jacintodesign.github.io/quotes-api/data/quotes.json';
-  try {
-    const response = await fetch(apiURL);
-    apiQuotes = await response.json();
-    newQuote();
-  } catch (error) {
-    //handle error here
+  while(true){
+    try {
+      const response = await fetch(apiURL);
+      apiQuotes = await response.json();
+      return newQuote();
+    } catch (error) {
+      //handle error here
+        retryCount++;
+        if(retryCount >= maxRetries){
+          return showErrorMessage();
+        } else {
+          return getQuotes();
+        }
+        
+    }
   }
+  
 }
 
 // Event listeners
