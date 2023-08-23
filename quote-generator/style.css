@@ -39,8 +39,11 @@ body {
   font-size: 4rem;
 }
 
-#author {
+.quote-author {
   margin-top: 15px;
+}
+
+#author {
   font-size: 2rem;
   font-weight: 400;
   font-style: italic;
