@@ -8,10 +8,11 @@ let photosArray = [];
 
 // check if all images were loaded
 const imageLoaded = () => {
-  console.log('image loaded')
   imagesLoaded++;
-  if(imagesLoaded === totalImages) ready = true;
-  console.log('ready = ', ready)
+  if(imagesLoaded === totalImages){
+    ready = true;
+    loader.hidden = true;
+  } 
 }
 
 
@@ -24,8 +25,8 @@ const setAttributes = (element, attributes) => {
 
 // Create elements for links & photos, Add to DOM
 const displayPhotos = () => {
+  imagesLoaded = 0;
   totalImages = photosArray.length;
-  console.log('total images: ', totalImages)
   // Run function for each object in photosArray
   photosArray.forEach(photo => {
     // Create <a> to link to unsplash
@@ -62,15 +63,14 @@ const getPhotos = async () => {
     photosArray = await response.json();
     displayPhotos();
   } catch (error) {
-    console.log('error: ', error)
   }
 }
 
 // check to see if scrolling near bottom of page, load more photos
 window.addEventListener('scroll', () => {
-  if(window.innerHeight + window.scrollY >= document.body.offsetHeight - 1000){
+  if(window.innerHeight + window.scrollY >= document.body.offsetHeight - 1000 && ready){
+    ready = false;
     getPhotos()
-    console.log('load more');
   }
 })
 
