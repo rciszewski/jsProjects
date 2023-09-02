@@ -75,6 +75,6 @@ window.addEventListener('scroll', () => {
 })
 
 // onLoad
-// getPhotos();
+getPhotos();
 
 
