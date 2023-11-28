@@ -1,5 +1,7 @@
 html {
   box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
 body {
@@ -9,4 +11,35 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-image: url(js-projects-bg5.jpeg);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+a {
+  text-decoration: none;
+  color: #000;
+}
+a:visited {
+  color: #000;
+}
+
+.projectContainer {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  column-gap: 5%;
+  > div {
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 12rem;
+    height: 12rem;
+    > h2 {
+      margin: 5px 0px;
+    }
+    > a {
+      margin: 5px 0px;
+    }
+  }
 }
