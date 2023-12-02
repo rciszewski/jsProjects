@@ -6,6 +6,9 @@ const image2 = document.getElementById("image2");
 const image3 = document.getElementById("image3");
 const projectsTextBox = document.getElementById("text-box");
 
+const DARK_THEME = "dark";
+const LIGHT_THEME = "light";
+
 // dark or light images
 const imageMode = (color) => {
   image1.src = `img/undraw_proud_coder_${color}.svg`;
@@ -14,31 +17,33 @@ const imageMode = (color) => {
 };
 
 const toggleTheme = (theme) => {
-  if (theme === "Dark") {
-    nav.style.backgroundColor = "rgb(0 0 0 / 50%)";
-    projectsTextBox.style.backgroundColor = "rgb(255 255 255 / 50%)";
-    toggleIcon.children[0].textContent = `${theme} Mode`;
-    toggleIcon.children[1].classList.replace("fa-sun", "fa-moon");
-    imageMode("dark");
-  } else {
-    nav.style.backgroundColor = "rgb(255 255 255 / 50%)";
-    projectsTextBox.style.backgroundColor = "rgb(0 0 0 / 50%)";
-    toggleIcon.children[0].textContent = `${theme} Mode`;
-    toggleIcon.children[1].classList.replace("fa-moon", "fa-sun");
-    imageMode("light");
-  }
+  nav.style.backgroundColor =
+    theme === DARK_THEME ? "rgb(0 0 0 / 50%)" : "rgb(255 255 255 / 50%)";
+
+  projectsTextBox.style.backgroundColor =
+    theme === DARK_THEME ? "rgb(255 255 255 / 50%)" : "rgb(0 0 0 / 50%)";
+  ("rgb(255 255 255 / 50%)");
+
+  toggleIcon.children[0].textContent =
+    theme === DARK_THEME ? `Dark Mode` : `Light Mode`;
+
+  theme === DARK_THEME
+    ? toggleIcon.children[1].classList.replace("fa-sun", "fa-moon")
+    : toggleIcon.children[1].classList.replace("fa-moon", "fa-sun");
+
+  imageMode(theme);
 };
 
 //Switch theme dynamically
 const switchTheme = (e) => {
   if (e.target.checked) {
-    document.documentElement.setAttribute("data-theme", "dark");
-    localStorage.setItem("theme", "dark");
-    toggleTheme("Dark");
+    document.documentElement.setAttribute("data-theme", DARK_THEME);
+    localStorage.setItem("theme", DARK_THEME);
+    toggleTheme(DARK_THEME);
   } else {
-    document.documentElement.setAttribute("data-theme", "light");
-    localStorage.setItem("theme", "light");
-    toggleTheme("Light");
+    document.documentElement.setAttribute("data-theme", LIGHT_THEME);
+    localStorage.setItem("theme", LIGHT_THEME);
+    toggleTheme(LIGHT_THEME);
   }
 };
 
@@ -50,8 +55,8 @@ const currentTheme = localStorage.getItem("theme");
 
 if (currentTheme) {
   document.documentElement.setAttribute("data-theme", currentTheme);
-  if (currentTheme === "dark") {
+  if (currentTheme === DARK_THEME) {
     toggleSwitch.checked = true;
-    toggleTheme("Dark");
+    toggleTheme(DARK_THEME);
   }
 }
