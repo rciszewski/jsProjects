@@ -22,7 +22,6 @@ const toggleTheme = (theme) => {
 
   projectsTextBox.style.backgroundColor =
     theme === DARK_THEME ? "rgb(255 255 255 / 50%)" : "rgb(0 0 0 / 50%)";
-  ("rgb(255 255 255 / 50%)");
 
   toggleIcon.children[0].textContent =
     theme === DARK_THEME ? `Dark Mode` : `Light Mode`;
