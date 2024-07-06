@@ -2,6 +2,8 @@ const image = document.querySelector("img");
 const title = document.querySelector("#title");
 const artist = document.querySelector("#artist");
 const music = document.querySelector("audio");
+const progressContainer = document.getElementById("progress-container");
+const progress = document.getElementById("progress");
 const prevBtn = document.querySelector("#prev");
 const playBtn = document.querySelector("#play");
 const nextBtn = document.querySelector("#next");
@@ -30,7 +32,7 @@ const songs = [
   },
 ];
 
-function swapPausePlayIcons(isPlaying) {
+function swapPausePlayIcons() {
   if (isPlaying) {
     if (playBtn.classList.contains("fa-pause")) return;
     playBtn.classList.replace("fa-play", "fa-pause");
@@ -47,7 +49,7 @@ let isPlaying = false;
 // Play
 function playSong() {
   isPlaying = true;
-  swapPausePlayIcons(isPlaying);
+  swapPausePlayIcons();
   music.play();
 }
 // Pause
@@ -96,12 +98,7 @@ function decrementSongSelection() {
     if (isPlaying) playSong();
   }
 }
-// Play or pause event listener
-playBtn.addEventListener("click", () => {
-  isPlaying ? pauseSong() : playSong();
-});
-nextBtn.addEventListener("click", incrementSongSelection);
-prevBtn.addEventListener("click", decrementSongSelection);
+
 
 // Update DOM
 function loadSong(song) {
@@ -113,3 +110,22 @@ function loadSong(song) {
 
 //On Load - select first song
 loadSong(songs[3]);
+
+// Update progress bar & time
+function updateProgressBar(e){
+  if(isPlaying){
+    const {duration, currentTime} = e.srcElement
+    // console.log({duration, currentTime})
+    //update progress bar width
+    const progressPercent = (currentTime / duration) * 100
+    progress.style.width = `${progressPercent}%`
+  }
+}
+
+// Play or pause event listener
+playBtn.addEventListener("click", () => {
+  isPlaying ? pauseSong() : playSong();
+});
+nextBtn.addEventListener("click", incrementSongSelection);
+prevBtn.addEventListener("click", decrementSongSelection);
+music.addEventListener('timeupdate', updateProgressBar)
