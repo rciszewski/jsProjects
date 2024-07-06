@@ -4,6 +4,8 @@ const artist = document.querySelector("#artist");
 const music = document.querySelector("audio");
 const progressContainer = document.getElementById("progress-container");
 const progress = document.getElementById("progress");
+const currentSongDuration = document.getElementById("duration");
+const currentSongTime = document.getElementById("current-time");
 const prevBtn = document.querySelector("#prev");
 const playBtn = document.querySelector("#play");
 const nextBtn = document.querySelector("#next");
@@ -99,7 +101,6 @@ function decrementSongSelection() {
   }
 }
 
-
 // Update DOM
 function loadSong(song) {
   title.textContent = song.displayName;
@@ -112,14 +113,43 @@ function loadSong(song) {
 loadSong(songs[3]);
 
 // Update progress bar & time
-function updateProgressBar(e){
-  if(isPlaying){
-    const {duration, currentTime} = e.srcElement
-    // console.log({duration, currentTime})
+function updateProgressBar(e) {
+  if (isPlaying) {
+    const { duration, currentTime } = e.srcElement;
     //update progress bar width
-    const progressPercent = (currentTime / duration) * 100
-    progress.style.width = `${progressPercent}%`
+    const progressPercent = (currentTime / duration) * 100;
+    progress.style.width = `${progressPercent}%`;
+    //calculate display for duration
+    const durationMinutes = Math.floor(duration / 60);
+    let durationSeconds = Math.floor(duration % 60);
+    if (durationSeconds < 10) {
+      durationSeconds = `0${durationSeconds}`;
+    }
+    //Delay switching duration Element to avoid NaN
+    if (durationSeconds) {
+      currentSongDuration.textContent = `${durationMinutes}:${durationSeconds}`;
+    }
+
+    //calculate display for duration
+    const currentTimeMinutes = Math.floor(currentTime / 60);
+    let currentTimeSeconds = Math.floor(currentTime % 60);
+    if (currentTimeSeconds < 10) {
+      currentTimeSeconds = `0${currentTimeSeconds}`;
+    }
+    //Delay switching duration Element to avoid NaN
+    if (currentTimeSeconds) {
+      currentSongTime.textContent = `${currentTimeMinutes}:${currentTimeSeconds}`;
+    }
   }
+}
+
+function setProgressBar(e) {
+  const width = this.clientWidth;
+  const clickX = e.offsetX;
+  const { duration } = music;
+  console.log(clickX / width);
+  console.log((clickX / width) * duration);
+  music.currentTime = (clickX / width) * duration;
 }
 
 // Play or pause event listener
@@ -128,4 +158,6 @@ playBtn.addEventListener("click", () => {
 });
 nextBtn.addEventListener("click", incrementSongSelection);
 prevBtn.addEventListener("click", decrementSongSelection);
-music.addEventListener('timeupdate', updateProgressBar)
+music.addEventListener('ended', incrementSongSelection)
+music.addEventListener("timeupdate", updateProgressBar);
+progressContainer.addEventListener("click", setProgressBar);
