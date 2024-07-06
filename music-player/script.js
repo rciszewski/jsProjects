@@ -64,38 +64,38 @@ function pauseSong() {
 
 function incrementSongSelection() {
   const currentSongIdx = songs.findIndex((song) => {
-    return song.displayName === title.textContent;
+    return song.displayName === title.innerText;
   });
   if (currentSongIdx === -1) return;
   if (currentSongIdx === songs.length - 1) {
     image.src = `img/${songs[0].name}.jpg`;
-    title.textContent = songs[0].displayName;
-    artist.textContent = songs[0].artist;
+    title.innerText = songs[0].displayName;
+    artist.innerText = songs[0].artist;
     music.src = `music/${songs[0].name}.mp3`;
     if (isPlaying) playSong();
   } else {
     image.src = `img/${songs[currentSongIdx + 1].name}.jpg`;
-    title.textContent = songs[currentSongIdx + 1].displayName;
-    artist.textContent = songs[currentSongIdx + 1].artist;
+    title.innerText = songs[currentSongIdx + 1].displayName;
+    artist.innerText = songs[currentSongIdx + 1].artist;
     music.src = `music/${songs[currentSongIdx + 1].name}.mp3`;
     if (isPlaying) playSong();
   }
 }
 function decrementSongSelection() {
   const currentSongIdx = songs.findIndex((song) => {
-    return song.displayName === title.textContent;
+    return song.displayName === title.innerText;
   });
   if (currentSongIdx === -1) return;
   if (currentSongIdx === 0) {
     image.src = `img/${songs[songs.length - 1].name}.jpg`;
-    title.textContent = songs[songs.length - 1].displayName;
-    artist.textContent = songs[songs.length - 1].artist;
+    title.innerText = songs[songs.length - 1].displayName;
+    artist.innerText = songs[songs.length - 1].artist;
     music.src = `music/${songs[songs.length - 1].name}.mp3`;
     if (isPlaying) playSong();
   } else {
     image.src = `img/${songs[currentSongIdx - 1].name}.jpg`;
-    title.textContent = songs[currentSongIdx - 1].displayName;
-    artist.textContent = songs[currentSongIdx - 1].artist;
+    title.innerText = songs[currentSongIdx - 1].displayName;
+    artist.innerText = songs[currentSongIdx - 1].artist;
     music.src = `music/${songs[currentSongIdx - 1].name}.mp3`;
     if (isPlaying) playSong();
   }
@@ -103,8 +103,8 @@ function decrementSongSelection() {
 
 // Update DOM
 function loadSong(song) {
-  title.textContent = song.displayName;
-  artist.textContent = song.artist;
+  title.innerText = song.displayName;
+  artist.innerText = song.artist;
   music.src = `music/${song.name}.mp3`;
   image.src = `img/${song.name}.jpg`;
 }
@@ -127,7 +127,7 @@ function updateProgressBar(e) {
     }
     //Delay switching duration Element to avoid NaN
     if (durationSeconds) {
-      currentSongDuration.textContent = `${durationMinutes}:${durationSeconds}`;
+      currentSongDuration.innerText = `${durationMinutes}:${durationSeconds}`;
     }
 
     //calculate display for duration
@@ -138,7 +138,7 @@ function updateProgressBar(e) {
     }
     //Delay switching duration Element to avoid NaN
     if (currentTimeSeconds) {
-      currentSongTime.textContent = `${currentTimeMinutes}:${currentTimeSeconds}`;
+      currentSongTime.innerText = `${currentTimeMinutes}:${currentTimeSeconds}`;
     }
   }
 }
