@@ -15,6 +15,7 @@ const completeBtn = document.getElementById("complete-btn");
 let countdownValue = Date;
 let countdownActive;
 let countdownTitle = "";
+let savedCountDown;
 
 const second = 1000;
 const minute = second * 60;
@@ -26,9 +27,9 @@ const today = new Date().toISOString().split("T")[0];
 dateEl.setAttribute("min", today);
 
 // Population countdown / Complete UI
-const updateDOM = (newDate) => {
+const updateDOM = (countDownDate) => {
   countdownActive = setInterval(() => {
-    countdownValue = new Date(newDate).getTime();
+    countdownValue = new Date(countDownDate).getTime();
     const today = new Date().getTime();
 
     const timeDifference = countdownValue - today;
@@ -37,12 +38,12 @@ const updateDOM = (newDate) => {
     const hourCountdown = Math.floor((timeDifference % day) / hour);
     const minuteCountdown = Math.floor((timeDifference % hour) / minute);
     const secondCountdown = Math.floor((timeDifference % minute) / second);
-    console.log("time difference", timeDifference);
+
     if (timeDifference < 0) {
       countDownContainer.setAttribute("hidden", true);
       completeEl.removeAttribute("hidden");
       clearInterval(countdownActive);
-      completeElInfo.textContent = `${countdownTitle} finished on ${newDate}`;
+      completeElInfo.textContent = `${countdownTitle} finished on ${countDownDate}`;
     } else {
       timeElements.forEach((span, idx) => {
         if (idx === 0) {
@@ -67,12 +68,17 @@ const updateDOM = (newDate) => {
 const updateCountDown = (e) => {
   e.preventDefault();
   countdownTitle = e.srcElement[0].value;
-  const newDate = e.srcElement[1].value;
+  const countDownDate = e.srcElement[1].value;
+  savedCountDown = {
+    title: countdownTitle,
+    date: countDownDate,
+  };
+  localStorage.setItem("countdown", JSON.stringify(savedCountDown));
 
   if (!countdownTitle) {
     alert("Please create a title for the countdown.");
     return;
-  } else if (!newDate) {
+  } else if (!countDownDate) {
     alert("Please select a date for the countdown.");
     return;
   } else {
@@ -80,7 +86,7 @@ const updateCountDown = (e) => {
     countDownContainer.removeAttribute("hidden");
     inputContainer.setAttribute("hidden", true);
     titleInput.value = "";
-    updateDOM(newDate);
+    updateDOM(countDownDate);
   }
 };
 
@@ -91,8 +97,21 @@ const resetCountDown = (e) => {
   window.clearInterval(countdownActive);
   dateEl.value = "";
   completeEl.hidden = true;
+  localStorage.removeItem("countdown");
 };
+
+function restorePreviousCountdown() {
+  //get countdown from local storage if available
+  if (localStorage.getItem("countdown")) {
+    inputContainer.hidden = true;
+    savedCountDown = JSON.parse(localStorage.getItem("countdown"));
+    countDownTitle.textContent = savedCountDown.title;
+    updateDOM(savedCountDown.date);
+  }
+}
 
 countdownForm.addEventListener("submit", updateCountDown);
 countDownButtonReset.addEventListener("click", resetCountDown);
 completeBtn.addEventListener("click", resetCountDown);
+
+restorePreviousCountdown();
