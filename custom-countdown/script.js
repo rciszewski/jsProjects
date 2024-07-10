@@ -12,7 +12,7 @@ const completeEl = document.getElementById("complete");
 const completeElInfo = document.getElementById("complete-info");
 const completeBtn = document.getElementById("complete-btn");
 
-let countdownValue = Date;
+let countdownValue = new Date();
 let countdownActive;
 let countdownTitle = "";
 let savedCountDown;
@@ -58,7 +58,6 @@ const updateDOM = (countDownDate) => {
         if (idx === 3) {
           span.textContent = secondCountdown;
         }
-        completeElInfo.hidden = true;
         countDownContainer.hidden = false;
       });
     }
