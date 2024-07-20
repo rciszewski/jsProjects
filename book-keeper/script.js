@@ -6,6 +6,7 @@ const websiteNameEl = document.querySelector("#website-name");
 const websiteUrlEl = document.querySelector("#website-url");
 const bookmarksContainer = document.getElementById("bookmarks-container");
 const saveBookmarkBtn = document.querySelector("button");
+const deleteBookmarkEl = document.querySelector("#delete-bookmark");
 
 let bookmarks = [];
 
@@ -48,6 +49,7 @@ function validate(nameValue, urlValue) {
 
 //Build bookmarks dom
 function buildBookmarks() {
+  bookmarksContainer.textContent = "";
   //build items
   bookmarks.forEach((bookmark) => {
     const { name, url } = bookmark;
@@ -88,15 +90,24 @@ function fetchBookmarks() {
     bookmarks = JSON.parse(localStorage.getItem("bookmarks"));
   } else {
     // create bookmarks array in localStorage
-    bookmarks = [
-      {
-        name: "Ron C",
-        url: "https://ronciszewski.com",
-      },
-    ];
     localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
   }
   buildBookmarks();
+}
+
+//Delete bookmark
+function deleteBookmark(url) {
+  console.log(bookmarks);
+  bookmarks.forEach((bookmark, idx) => {
+    if (bookmark.url === url) {
+      bookmarks.splice(idx, 1);
+    }
+  });
+  console.log(bookmarks);
+
+  // Update bookmarks array in local Storage, re-populate DOM
+  localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
+  fetchBookmarks();
 }
 
 //Handle data from form
